@@ -1,0 +1,27 @@
+---
+- name: Check for conectivity
+  action: ping
+- name: Get packages
+  apt: name={{item}} state=installed update_cache=true
+  with_items:
+    - lxc
+    - python-pip
+- name: Upgrade pip, wheel and setuptools
+  pip:
+    name: pip
+    state: latest 
+    extra_args: '--upgrade'
+- name: Get lxc-python2 for LXC
+  copy: src=files/lxc_python2-0.1-cp27-cp27mu-linux_x86_64.whl dest=/root/lxc_python2-0.1-cp27-cp27mu-linux_x86_64.whl
+- name: Install lxc_python2
+  pip: name='file:///root/lxc_python2-0.1-cp27-cp27mu-linux_x86_64.whl'
+- name: Create containers
+  lxc_container:
+    template: ubuntu
+    name: "{{ lxc_name }}"
+    state: started
+    template_options: --release trusty
+    container_log: true
+    container_config: 
+    - "lxc.start.auto = 1"
+    - "lxc.start.delay = 5"
