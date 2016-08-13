@@ -1,0 +1,4 @@
+---
+- name: Echo file with vars
+  copy: src=vars.j2 dest=/root/logs
+  

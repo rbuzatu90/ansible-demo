@@ -1,4 +1,8 @@
 ---
-- hosts: all
+- hosts: local
+  gather_facts: False
   roles:
-    - lxc
+    - ansible_host
+- hosts: zuul
+  roles:
+    - zuul
